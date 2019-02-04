@@ -11,7 +11,6 @@ from utils import get_soup
 from utils import get_path
 from utils import url_encode
 
-
 def get_article_urls(query, start_date, end_date=None, verbose=True, debug=True):
     if end_date == None:
         end_date = start_date
@@ -142,13 +141,14 @@ class SearchCrawler:
                     content = json_dict.get('content', '')
                     if not content:
                         continue
-                    index = '{}\t{}\t{}\t{}'.format(
+                    index = '{}\t{}\t{}\t|||||||{}\t|||||||{}'.format(
                         get_path(json_dict['oid'], year, month, date, json_dict['aid']),
                         json_dict.get('sid1',''),
                         json_dict.get('writtenTime', ''),
                         json_dict.get('title', '')
+                        ,content.replace('\n', '  ').replace('\r\n', '  ').strip()
                     )
-                    docs.append(content.replace('\n', '  ').replace('\r\n', '  ').strip())
+                    docs.append(json_dict['aid'] +"\t"+content.replace('\n', '  ').replace('\r\n', '  ').strip())
                     indexs.append(index)
                     if self.comments:
                         comments.append(get_comments(url))
